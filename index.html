@@ -565,36 +565,64 @@
   var editingId = null;
   var isAuth = !!sessionStorage.getItem('iris_token');
 
-  var CACHE_TTL = 10 * 60 * 1000; // 10 minutos en ms
+  var CACHE_KEY_PRODUCTS = 'iris_cache_products';
+  var CACHE_KEY_RESENAS  = 'iris_cache_resenas';
+  var CACHE_KEY_TS       = 'iris_cache_ts';
 
   function cacheGet(key) {
-    try {
-      var raw = localStorage.getItem(key);
-      if (!raw) return null;
-      var obj = JSON.parse(raw);
-      if (Date.now() - obj.ts > CACHE_TTL) { localStorage.removeItem(key); return null; }
-      return obj.data;
-    } catch(e) { return null; }
+    try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
   }
-
   function cacheSet(key, data) {
-    try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data: data })); } catch(e) {}
+    try { localStorage.setItem(key, JSON.stringify(data)); } catch(e) {}
+  }
+  function cacheInvalidate() {
+    localStorage.removeItem(CACHE_KEY_PRODUCTS);
+    localStorage.removeItem(CACHE_KEY_RESENAS);
+    localStorage.removeItem(CACHE_KEY_TS);
   }
 
-  function cacheInvalidate() {
-    localStorage.removeItem('iris_cache_products');
-    localStorage.removeItem('iris_cache_resenas');
+  // Verifica si el caché local está actualizado comparando con el servidor.
+  // cb(isValid) → true significa que el caché es válido y no hay que recargar.
+  function checkCacheValid(cb) {
+    fetch('/.netlify/functions/last-updated')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var serverTs = d.ts || 0;
+        var localTs  = cacheGet(CACHE_KEY_TS) || 0;
+        cb(serverTs <= localTs);
+      })
+      .catch(function(){ cb(false); }); // ante error, recargar siempre
   }
 
   // ── CARGAR PRODUCTOS ──
   function loadProducts() {
-    var cached = cacheGet('iris_cache_products');
-    if (cached) { products = cached; renderProducts(); return; }
+    var cached = cacheGet(CACHE_KEY_PRODUCTS);
+    if (cached) {
+      products = cached; renderProducts();
+      // Verifica en segundo plano si hay cambios en el servidor
+      checkCacheValid(function(valid){
+        if (!valid) fetchProducts();
+      });
+      return;
+    }
+    fetchProducts();
+  }
+
+  function fetchProducts() {
     el('products-grid').innerHTML = '<div class="loading-state"><span class="loading-dots">Cargando productos</span></div>';
     fetch('/.netlify/functions/obtener-productos')
       .then(function(r){ return r.json(); })
-      .then(function(d){ products = d.ok ? (d.products || []) : []; cacheSet('iris_cache_products', products); renderProducts(); })
-      .catch(function(){ products = []; renderProducts(); });
+      .then(function(d){
+        products = d.ok ? (d.products||[]) : [];
+        cacheSet(CACHE_KEY_PRODUCTS, products);
+        // Guardar el timestamp del servidor como referencia
+        fetch('/.netlify/functions/last-updated')
+          .then(function(r){ return r.json(); })
+          .then(function(d){ cacheSet(CACHE_KEY_TS, d.ts||0); })
+          .catch(function(){});
+        renderProducts();
+      })
+      .catch(function(){ products=[]; renderProducts(); });
   }
 
   // ── RENDER CATÁLOGO ──
@@ -928,13 +956,23 @@
   var resenas = [];
 
   function loadResenas() {
-    var cached = cacheGet('iris_cache_resenas');
-    if (cached) { resenas = cached; renderResenas(); return; }
+    var cached = cacheGet(CACHE_KEY_RESENAS);
+    if (cached) {
+      resenas = cached; renderResenas();
+      checkCacheValid(function(valid){
+        if (!valid) fetchResenas();
+      });
+      return;
+    }
+    fetchResenas();
+  }
+
+  function fetchResenas() {
     el('testimonios-grid').innerHTML = '<div class="loading-state"><span class="loading-dots">Cargando reseñas</span></div>';
     fetch('/.netlify/functions/obtener-resenas')
       .then(function(r){ return r.json(); })
-      .then(function(d){ resenas = d.ok ? (d.resenas || []) : []; cacheSet('iris_cache_resenas', resenas); renderResenas(); })
-      .catch(function(){ resenas = []; renderResenas(); });
+      .then(function(d){ resenas = d.ok ? (d.resenas||[]) : []; cacheSet(CACHE_KEY_RESENAS, resenas); renderResenas(); })
+      .catch(function(){ resenas=[]; renderResenas(); });
   }
 
   function renderResenas() {

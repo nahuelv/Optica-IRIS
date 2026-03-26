@@ -30,6 +30,12 @@ exports.handler = async function (event) {
 
     await store.delete(String(body.id));
 
+
+  // Actualizar timestamp de última modificación
+  try {
+    const meta = getStore({ name: 'meta', siteID: process.env.NETLIFY_SITE_ID, token: process.env.NETLIFY_TOKEN });
+    await meta.setJSON('last_updated', { ts: Date.now() });
+  } catch(e) {}
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
