@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Óptica Iris</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --black: #0a0a0a; --white: #fafaf8; --cream: #f2efe8;
+    --accent: #2d5a4b; --accent-light: #4a8c78;
+    --muted: #888880; --border: #e2dfd8; --card-bg: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; background: rgba(250,250,248,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 500; letter-spacing: .08em; color: var(--black); text-decoration: none; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; color: var(--black); text-decoration: none; font-weight: 400; transition: color .2s; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-admin-btn { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; background: var(--black); color: var(--white); border: none; padding: .55rem 1.3rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: background .2s; }
+  .nav-admin-btn:hover { background: var(--accent); }
+
+  /* HERO */
+  #inicio { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 6rem 4rem; }
+  .hero-tag { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; font-weight: 500; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 5vw, 5.5rem); font-weight: 300; line-height: 1.05; margin-bottom: 1.8rem; letter-spacing: -.01em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-desc { font-size: .95rem; color: #555; line-height: 1.8; max-width: 400px; margin-bottom: 2.8rem; font-weight: 300; }
+  .hero-cta { display: inline-block; background: var(--accent); color: var(--white); text-decoration: none; padding: .9rem 2.2rem; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; transition: background .2s, transform .2s; }
+  .hero-cta:hover { background: var(--black); transform: translateY(-2px); }
+  .hero-right { background: var(--cream); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .hero-visual { width: 340px; height: 340px; border-radius: 50%; background: linear-gradient(135deg, #2d5a4b22, #2d5a4b44); display: flex; align-items: center; justify-content: center; position: relative; }
+  .hero-visual::before { content: ''; position: absolute; width: 280px; height: 280px; border-radius: 50%; border: 1px solid rgba(45,90,75,.2); animation: pulse 3s ease-in-out infinite; }
+  .hero-visual svg { width: 140px; height: 140px; opacity: .7; }
+  .hero-stats { position: absolute; bottom: 3rem; right: 3rem; display: flex; gap: 2rem; }
+  .stat { text-align: right; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 500; color: var(--black); line-height: 1; }
+  .stat-label { font-size: .7rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:.3} 50%{transform:scale(1.08);opacity:.6} }
+
+  /* SECTIONS */
+  section { padding: 6rem 4rem; }
+  .section-label { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; font-weight: 500; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 300; line-height: 1.15; margin-bottom: 1rem; }
+
+  /* CATALOGO */
+  .cats { display: flex; gap: 1rem; margin: 2.5rem 0 3rem; flex-wrap: wrap; }
+  .cat-btn { padding: .5rem 1.4rem; border: 1px solid var(--border); background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: all .2s; color: var(--muted); }
+  .cat-btn.active, .cat-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2rem; }
+  .product-card { background: var(--card-bg); border: 1px solid var(--border); transition: transform .3s, box-shadow .3s; cursor: pointer; }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,.08); }
+  .product-img { aspect-ratio: 4/3; background: var(--cream); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+  .product-img img { width: 100%; height: 100%; object-fit: cover; }
+  .product-img-placeholder { width: 80px; height: 80px; opacity: .25; }
+  .product-badge { position: absolute; top: 1rem; left: 1rem; background: var(--accent); color: var(--white); font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: .25rem .7rem; font-weight: 500; }
+  .product-info { padding: 1.2rem 1.4rem 1.4rem; }
+  .product-brand { font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); margin-bottom: .3rem; }
+  .product-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 500; margin-bottom: .5rem; }
+  .product-desc { font-size: .82rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; color: var(--accent); }
+  .product-tag { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: .2rem .6rem; }
+  .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; color: var(--muted); }
+  .empty-state svg { width: 60px; height: 60px; margin-bottom: 1rem; opacity: .3; }
+  .empty-state p { font-size: 1rem; }
+
+  /* NOSOTROS */
+  #nosotros { background: var(--cream); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .about-text p { font-size: .95rem; color: #555; line-height: 1.9; margin-top: 1.5rem; font-weight: 300; }
+  .about-features { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .feature { display: flex; align-items: flex-start; gap: 1rem; }
+  .feature-icon { width: 36px; height: 36px; min-width: 36px; background: var(--accent); display: flex; align-items: center; justify-content: center; }
+  .feature-icon svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; }
+  .feature-text h4 { font-size: .85rem; font-weight: 500; letter-spacing: .05em; }
+  .feature-text p { font-size: .8rem; color: var(--muted); margin-top: .2rem; }
+  .about-visual { background: var(--white); padding: 3rem; display: flex; flex-direction: column; gap: 1.5rem; border: 1px solid var(--border); }
+  .about-stat { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+  .about-stat:last-child { border-bottom: none; padding-bottom: 0; }
+  .about-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300; color: var(--accent); line-height: 1; }
+  .about-stat-desc { font-size: .82rem; color: var(--muted); margin-top: .3rem; }
+
+  /* CONTACTO */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; }
+  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
+  .contact-item h4 { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
+  .contact-item p { font-size: .95rem; color: var(--black); line-height: 1.7; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .contact-form input, .contact-form textarea { border: 1px solid var(--border); background: var(--white); padding: .85rem 1rem; font-family: 'DM Sans', sans-serif; font-size: .88rem; outline: none; color: var(--black); transition: border-color .2s; width: 100%; }
+  .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); }
+  .contact-form textarea { resize: none; height: 120px; }
+  .form-btn { background: var(--black); color: var(--white); border: none; padding: .9rem 2rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; transition: background .2s; align-self: flex-start; }
+  .form-btn:hover { background: var(--accent); }
+
+  /* FOOTER */
+  footer { background: var(--black); color: var(--white); padding: 3rem 4rem; display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 500; letter-spacing: .08em; }
+  .footer-logo span { color: var(--accent-light); }
+  footer p { font-size: .78rem; color: #666; }
+
+  /* LOGIN MODAL */
+  #login-overlay { display: none; position: fixed; inset: 0; z-index: 998; background: rgba(0,0,0,.65); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
+  #login-overlay.open { display: flex; }
+  .login-box { background: var(--white); width: 360px; padding: 2.8rem 2.4rem; border: 1px solid var(--border); }
+  .login-lock { display: flex; justify-content: center; margin-bottom: 1.4rem; }
+  .login-lock svg { width: 34px; height: 34px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .login-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; text-align: center; margin-bottom: .3rem; }
+  .login-logo span { color: var(--accent); }
+  .login-subtitle { text-align: center; font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.8rem; }
+  .login-fields { display: flex; flex-direction: column; gap: 1rem; }
+  .login-fields input { border: 1px solid var(--border); padding: .8rem 2.6rem .8rem 1rem; font-family: 'DM Sans', sans-serif; font-size: .88rem; outline: none; color: var(--black); transition: border-color .2s; width: 100%; }
+  .login-fields input:focus { border-color: var(--accent); }
+  .input-wrap { position: relative; }
+  .toggle-pw { position: absolute; right: .75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); padding: 0; }
+  .toggle-pw svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; display: block; }
+  .login-error { color: #c0392b; font-size: .78rem; text-align: center; display: none; }
+  .login-error.show { display: block; }
+  .login-submit { background: var(--accent); color: var(--white); border: none; padding: .9rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; transition: background .2s; width: 100%; }
+  .login-submit:hover { background: var(--black); }
+  .login-cancel { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .78rem; color: var(--muted); cursor: pointer; text-align: center; width: 100%; text-decoration: underline; transition: color .2s; }
+  .login-cancel:hover { color: var(--black); }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
+  .login-box.animate-in { animation: fadeUp .3s cubic-bezier(.16,1,.3,1); }
+  .login-box.shake { animation: shake .4s ease; }
+
+  /* ADMIN PANEL */
+  #admin-overlay { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); align-items: flex-start; justify-content: flex-end; }
+  #admin-overlay.open { display: flex; }
+  .admin-panel { width: 520px; height: 100vh; background: var(--white); overflow-y: auto; display: flex; flex-direction: column; animation: slideIn .35s cubic-bezier(.16,1,.3,1); }
+  @keyframes slideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
+  .admin-header { padding: 2rem 2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--white); z-index: 10; }
+  .admin-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 500; }
+  .admin-header h2 span { color: var(--accent); }
+  .admin-header-right { display: flex; gap: .7rem; align-items: center; }
+  .admin-close { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1.4rem; line-height: 1; transition: color .2s; }
+  .admin-close:hover { color: var(--black); }
+  .admin-logout-btn { background: none; border: 1px solid var(--border); padding: .35rem .9rem; font-family: 'DM Sans', sans-serif; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); cursor: pointer; transition: all .2s; }
+  .admin-logout-btn:hover { border-color: #c0392b; color: #c0392b; }
+  .admin-tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 2rem; }
+  .admin-tab { padding: 1rem 1.2rem; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; border-bottom: 2px solid transparent; color: var(--muted); transition: all .2s; background: none; border: none; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+  .admin-tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+  .admin-body { padding: 2rem; flex: 1; }
+  .admin-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: .4rem; }
+  .form-group label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .form-group input, .form-group select, .form-group textarea { border: 1px solid var(--border); padding: .75rem .9rem; font-family: 'DM Sans', sans-serif; font-size: .88rem; outline: none; background: var(--white); color: var(--black); transition: border-color .2s; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+  .form-group textarea { resize: none; height: 90px; }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .img-upload-area { border: 1.5px dashed var(--border); padding: 1.5rem; text-align: center; cursor: pointer; transition: border-color .2s; background: var(--cream); position: relative; }
+  .img-upload-area:hover { border-color: var(--accent); }
+  .img-upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; border: none; padding: 0; width: 100%; height: 100%; }
+  .img-upload-area p { font-size: .82rem; color: var(--muted); pointer-events: none; }
+  .img-upload-area span { color: var(--accent); font-weight: 500; }
+  .img-preview { display: none; width: 100%; max-height: 160px; object-fit: cover; margin-top: .8rem; }
+  .admin-save-btn { background: var(--accent); color: var(--white); border: none; padding: 1rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: .85rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 500; transition: background .2s; margin-top: .5rem; }
+  .admin-save-btn:hover { background: var(--black); }
+  .admin-product-list { display: flex; flex-direction: column; gap: .8rem; }
+  .admin-product-item { display: flex; align-items: center; gap: 1rem; border: 1px solid var(--border); padding: .8rem 1rem; transition: border-color .2s; }
+  .admin-product-item:hover { border-color: var(--accent); }
+  .admin-product-thumb { width: 56px; height: 42px; object-fit: cover; background: var(--cream); flex-shrink: 0; }
+  .admin-product-info { flex: 1; min-width: 0; }
+  .admin-product-info strong { font-size: .88rem; display: block; }
+  .admin-product-info span { font-size: .75rem; color: var(--muted); }
+  .admin-delete-btn { background: none; border: 1px solid var(--border); padding: .3rem .6rem; cursor: pointer; font-size: .75rem; color: #c0392b; transition: all .2s; font-family: 'DM Sans', sans-serif; }
+  .admin-delete-btn:hover { background: #c0392b; color: white; border-color: #c0392b; }
+  .admin-empty { text-align: center; padding: 3rem; color: var(--muted); font-size: .88rem; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(2rem); background: var(--accent); color: white; padding: .8rem 2rem; font-size: .85rem; z-index: 9999; opacity: 0; transition: all .4s; pointer-events: none; letter-spacing: .05em; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 2rem; }
+    .nav-links { display: none; }
+    #inicio { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 4rem 2rem; }
+    section { padding: 4rem 2rem; }
+    #nosotros { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .admin-panel { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#inicio" class="nav-logo">Óptica <span>Iris</span></a>
+  <ul class="nav-links">
+    <li><a href="#catalogo">Catálogo</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <button class="nav-admin-btn" id="btn-admin">Admin</button>
+</nav>
+
+<section id="inicio">
+  <div class="hero-left">
+    <p class="hero-tag">Óptica Iris — Rosario</p>
+    <h1 class="hero-title">Ver el mundo<br>con <em>claridad</em><br>y estilo.</h1>
+    <p class="hero-desc">Lentes de calidad, atención personalizada y las mejores marcas para que tu mirada sea única.</p>
+    <a href="#catalogo" class="hero-cta">Ver Catálogo</a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <svg viewBox="0 0 120 60" fill="none">
+        <ellipse cx="32" cy="30" rx="28" ry="22" stroke="#2d5a4b" stroke-width="3"/>
+        <ellipse cx="88" cy="30" rx="28" ry="22" stroke="#2d5a4b" stroke-width="3"/>
+        <path d="M60 30 Q64 24 72 30" stroke="#2d5a4b" stroke-width="3" fill="none"/>
+        <circle cx="32" cy="30" r="8" fill="#2d5a4b" opacity=".15"/>
+        <circle cx="88" cy="30" r="8" fill="#2d5a4b" opacity=".15"/>
+      </svg>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Modelos</div></div>
+      <div class="stat"><div class="stat-num">15+</div><div class="stat-label">Años</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="catalogo">
+  <p class="section-label">Nuestros productos</p>
+  <h2 class="section-title">Catálogo</h2>
+  <div class="cats">
+    <button class="cat-btn active" data-cat="todos">Todos</button>
+    <button class="cat-btn" data-cat="vista">Anteojos de vista</button>
+    <button class="cat-btn" data-cat="sol">Anteojos de sol</button>
+    <button class="cat-btn" data-cat="contacto">Lentes de contacto</button>
+    <button class="cat-btn" data-cat="accesorios">Accesorios</button>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</section>
+
+<section id="nosotros">
+  <div class="about-text">
+    <p class="section-label">Quiénes somos</p>
+    <h2 class="section-title">Más de una década<br>cuidando tu visión.</h2>
+    <p>En Óptica Iris llevamos años ayudando a nuestros clientes a ver el mundo con claridad. Contamos con profesionales capacitados, tecnología de última generación y un amplio catálogo de marcos y lentes para todos los estilos.</p>
+    <div class="about-features">
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div class="feature-text"><h4>Control visual gratuito</h4><p>Examen optométrico sin cargo con tu compra</p></div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="feature-text"><h4>Garantía en todos los productos</h4><p>Respaldo total en marcos, lentes y contactología</p></div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div class="feature-text"><h4>Atención personalizada</h4><p>Te asesoramos para encontrar el marco ideal para vos</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="about-visual">
+    <div class="about-stat"><div class="about-stat-num">+15</div><div class="about-stat-desc">Años de experiencia en óptica profesional</div></div>
+    <div class="about-stat"><div class="about-stat-num">+500</div><div class="about-stat-desc">Modelos disponibles en stock permanente</div></div>
+    <div class="about-stat"><div class="about-stat-num">+20</div><div class="about-stat-desc">Marcas nacionales e internacionales</div></div>
+  </div>
+</section>
+
+<section id="contacto">
+  <p class="section-label">Encontranos</p>
+  <h2 class="section-title">Contacto</h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item"><h4>Dirección</h4><p>Av. Corrientes 1234<br>Rosario, Santa Fe</p></div>
+      <div class="contact-item"><h4>Horario</h4><p>Lunes a Viernes: 9 – 13 / 17 – 21<br>Sábados: 9 – 13</p></div>
+      <div class="contact-item"><h4>Teléfono / WhatsApp</h4><p>+54 341 000-0000</p></div>
+      <div class="contact-item"><h4>Email</h4><p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82ebece4edc2edf2f6ebe1e3ebf0ebf1ace1edeface3f0">[email&#160;protected]</a></p></div>
+    </div>
+    <form class="contact-form" id="contact-form">
+      <div class="form-row">
+        <input type="text" placeholder="Tu nombre">
+        <input type="email" placeholder="Tu email">
+      </div>
+      <input type="text" placeholder="Asunto">
+      <textarea placeholder="Tu mensaje…"></textarea>
+      <button class="form-btn" type="submit">Enviar mensaje</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Óptica <span>Iris</span></div>
+  <p>© 2025 Óptica Iris · Rosario, Santa Fe</p>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div id="login-overlay">
+  <div class="login-box animate-in" id="login-box">
+    <div class="login-lock">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div class="login-logo">Óptica <span>Iris</span></div>
+    <div class="login-subtitle">Acceso administrador</div>
+    <div class="login-fields">
+      <input type="text" id="login-user" placeholder="Usuario" autocomplete="off">
+      <div class="input-wrap">
+        <input type="password" id="login-pass" placeholder="Contraseña" autocomplete="off">
+        <button class="toggle-pw" id="toggle-pw" type="button" title="Mostrar contraseña">
+          <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="login-error" id="login-error">Usuario o contraseña incorrectos</div>
+      <button class="login-submit" id="login-submit" type="button">Ingresar</button>
+      <button class="login-cancel" id="login-cancel" type="button">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-overlay">
+  <div class="admin-panel">
+    <div class="admin-header">
+      <h2>Panel <span>Admin</span></h2>
+      <div class="admin-header-right">
+        <button class="admin-logout-btn" id="admin-logout">Cerrar sesión</button>
+        <button class="admin-close" id="admin-close">✕</button>
+      </div>
+    </div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="nuevo">Nuevo producto</button>
+      <button class="admin-tab" data-tab="lista" id="tab-count-btn">Productos (0)</button>
+    </div>
+    <div class="admin-body">
+      <div id="tab-nuevo" class="admin-form">
+        <div class="form-group">
+          <label>Nombre del producto *</label>
+          <input type="text" id="p-name" placeholder="Ej: Ray-Ban Wayfarer Classic">
+        </div>
+        <div class="form-group">
+          <label>Marca</label>
+          <input type="text" id="p-brand" placeholder="Ej: Ray-Ban">
+        </div>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label>Categoría *</label>
+            <select id="p-cat">
+              <option value="">Seleccionar…</option>
+              <option value="vista">Anteojos de vista</option>
+              <option value="sol">Anteojos de sol</option>
+              <option value="contacto">Lentes de contacto</option>
+              <option value="accesorios">Accesorios</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Precio (ARS)</label>
+            <input type="number" id="p-price" placeholder="Ej: 35000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea id="p-desc" placeholder="Breve descripción del producto…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Imagen</label>
+          <div class="img-upload-area">
+            <input type="file" accept="image/*" id="p-img-input">
+            <p>Arrastrá o <span>hacé clic para subir</span></p>
+            <img class="img-preview" id="p-img-preview" alt="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Badge (opcional)</label>
+          <input type="text" id="p-badge" placeholder="Ej: Nuevo, Oferta, Destacado">
+        </div>
+        <button class="admin-save-btn" id="admin-save">Agregar producto al catálogo</button>
+      </div>
+      <div id="tab-lista" style="display:none;">
+        <div class="admin-product-list" id="admin-product-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  // ── ESTADO ──
+  var products = JSON.parse(localStorage.getItem('iris_products') || '[]');
+  var currentFilter = 'todos';
+  var imgBase64 = null;
+  // El token se guarda en sessionStorage: dura mientras la pestaña esté abierta
+  var isAuth = !!sessionStorage.getItem('iris_token');
+
+  function el(id) { return document.getElementById(id); }
+
+  // ── TOAST ──
+  function showToast(msg) {
+    var t = el('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 2800);
+  }
+
+  function catLabel(cat) {
+    var m = { vista: 'Vista', sol: 'Sol', contacto: 'Contacto', accesorios: 'Accesorios' };
+    return m[cat] || cat;
+  }
+
+  // ── CATÁLOGO ──
+  function renderProducts() {
+    var grid = el('products-grid');
+    var filtered = currentFilter === 'todos'
+      ? products
+      : products.filter(function (p) { return p.cat === currentFilter; });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="empty-state">'
+        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">'
+        + '<path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>'
+        + '<path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>'
+        + '<p>No hay productos en esta categoría todavía.<br>¡Agregá uno desde el panel admin!</p></div>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(function (p) {
+      return '<div class="product-card">'
+        + '<div class="product-img">'
+        + (p.img
+            ? '<img src="' + p.img + '" alt="' + p.name + '">'
+            : '<svg class="product-img-placeholder" viewBox="0 0 120 60" fill="none">'
+              + '<ellipse cx="32" cy="30" rx="28" ry="22" stroke="#2d5a4b" stroke-width="3"/>'
+              + '<ellipse cx="88" cy="30" rx="28" ry="22" stroke="#2d5a4b" stroke-width="3"/>'
+              + '<path d="M60 30 Q64 24 72 30" stroke="#2d5a4b" stroke-width="3" fill="none"/></svg>')
+        + (p.badge ? '<span class="product-badge">' + p.badge + '</span>' : '')
+        + '</div><div class="product-info">'
+        + (p.brand ? '<p class="product-brand">' + p.brand + '</p>' : '')
+        + '<h3 class="product-name">' + p.name + '</h3>'
+        + (p.desc ? '<p class="product-desc">' + p.desc + '</p>' : '')
+        + '<div class="product-footer">'
+        + (p.price ? '<span class="product-price">$' + Number(p.price).toLocaleString('es-AR') + '</span>' : '')
+        + '<span class="product-tag">' + catLabel(p.cat) + '</span>'
+        + '</div></div></div>';
+    }).join('');
+  }
+
+  document.querySelectorAll('.cat-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      currentFilter = btn.dataset.cat;
+      document.querySelectorAll('.cat-btn').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      renderProducts();
+    });
+  });
+
+  // ── LOGIN ──
+  function openLogin() {
+    if (isAuth) { openAdmin(); return; }
+    el('login-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    var box = el('login-box');
+    box.classList.remove('shake');
+    box.classList.add('animate-in');
+    setTimeout(function () { el('login-user').focus(); }, 80);
+  }
+
+  function closeLogin() {
+    el('login-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+    el('login-error').classList.remove('show');
+    el('login-user').value = '';
+    el('login-pass').value = '';
+  }
+
+  function doLogin() {
+    var u = el('login-user').value.trim();
+    var p = el('login-pass').value;
+    if (!u || !p) return;
+
+    var btn = el('login-submit');
+    btn.textContent = 'Verificando…';
+    btn.disabled = true;
+    el('login-error').classList.remove('show');
+
+    // Login via Netlify Identity
+    netlifyIdentity.on('error', function() {
+      btn.textContent = 'Ingresar';
+      btn.disabled = false;
+      el('login-error').textContent = 'Usuario o contraseña incorrectos';
+      el('login-error').classList.add('show');
+      el('login-pass').value = '';
+      el('login-pass').focus();
+      var box = el('login-box');
+      box.classList.remove('animate-in', 'shake');
+      void box.offsetWidth;
+      box.classList.add('shake');
+    });
+
+    netlifyIdentity.on('login', function(user) {
+      btn.textContent = 'Ingresar';
+      btn.disabled = false;
+      isAuth = true;
+      sessionStorage.setItem('iris_token', user.token.access_token);
+      netlifyIdentity.close();
+      closeLogin();
+      openAdmin();
+    });
+
+    // Intentar login con email/pass via Netlify Identity API
+    var siteUrl = window.location.origin;
+    fetch(siteUrl + '/.netlify/identity/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'grant_type=password&username=' + encodeURIComponent(u) + '&password=' + encodeURIComponent(p)
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('invalid');
+      return res.json();
+    })
+    .then(function(data) {
+      btn.textContent = 'Ingresar';
+      btn.disabled = false;
+      isAuth = true;
+      sessionStorage.setItem('iris_token', data.access_token);
+      closeLogin();
+      openAdmin();
+    })
+    .catch(function() {
+      btn.textContent = 'Ingresar';
+      btn.disabled = false;
+      el('login-error').textContent = 'Usuario o contraseña incorrectos';
+      el('login-error').classList.add('show');
+      el('login-pass').value = '';
+      el('login-pass').focus();
+      var box = el('login-box');
+      box.classList.remove('animate-in', 'shake');
+      void box.offsetWidth;
+      box.classList.add('shake');
+    });
+  }
+
+  el('btn-admin').addEventListener('click', openLogin);
+  el('login-submit').addEventListener('click', doLogin);
+  el('login-cancel').addEventListener('click', closeLogin);
+  el('login-pass').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+  el('toggle-pw').addEventListener('click', function () {
+    var inp = el('login-pass');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  });
+  el('login-overlay').addEventListener('click', function (e) {
+    if (e.target === el('login-overlay')) closeLogin();
+  });
+
+  // ── ADMIN ──
+  function openAdmin() {
+    el('admin-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderAdminList();
+    updateTabCount();
+  }
+
+  function closeAdmin() {
+    el('admin-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function logout() {
+    isAuth = false;
+    sessionStorage.removeItem('iris_token');
+    closeAdmin();
+    showToast('Sesión cerrada');
+  }
+
+  el('admin-close').addEventListener('click', closeAdmin);
+  el('admin-logout').addEventListener('click', logout);
+  el('admin-overlay').addEventListener('click', function (e) {
+    if (e.target === el('admin-overlay')) closeAdmin();
+  });
+
+  // ── TABS ADMIN ──
+  document.querySelectorAll('.admin-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.admin-tab').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      var which = tab.dataset.tab;
+      el('tab-nuevo').style.display = which === 'nuevo' ? 'flex' : 'none';
+      el('tab-lista').style.display = which === 'lista' ? 'block' : 'none';
+      if (which === 'lista') renderAdminList();
+    });
+  });
+
+  function updateTabCount() {
+    el('tab-count-btn').textContent = 'Productos (' + products.length + ')';
+  }
+
+  // ── LISTA ADMIN ──
+  function renderAdminList() {
+    var list = el('admin-product-list');
+    if (products.length === 0) {
+      list.innerHTML = '<div class="admin-empty">No hay productos cargados aún.</div>';
+      return;
+    }
+    list.innerHTML = products.map(function (p, i) {
+      return '<div class="admin-product-item">'
+        + (p.img
+            ? '<img class="admin-product-thumb" src="' + p.img + '">'
+            : '<div class="admin-product-thumb" style="background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🕶️</div>')
+        + '<div class="admin-product-info"><strong>' + p.name + '</strong>'
+        + '<span>' + catLabel(p.cat) + (p.price ? ' · $' + Number(p.price).toLocaleString('es-AR') : '') + '</span></div>'
+        + '<button class="admin-delete-btn" data-index="' + i + '">Eliminar</button>'
+        + '</div>';
+    }).join('');
+
+    list.querySelectorAll('.admin-delete-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        products.splice(Number(btn.dataset.index), 1);
+        localStorage.setItem('iris_products', JSON.stringify(products));
+        renderProducts();
+        updateTabCount();
+        renderAdminList();
+        showToast('Producto eliminado');
+      });
+    });
+  }
+
+  // ── IMAGEN ──
+  el('p-img-input').addEventListener('change', function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      imgBase64 = ev.target.result;
+      var preview = el('p-img-preview');
+      preview.src = imgBase64;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ── GUARDAR PRODUCTO ──
+  el('admin-save').addEventListener('click', function () {
+    var name = el('p-name').value.trim();
+    var cat  = el('p-cat').value;
+    if (!name) { showToast('⚠ Ingresá un nombre para el producto'); return; }
+    if (!cat)  { showToast('⚠ Seleccioná una categoría'); return; }
+
+    products.push({
+      id:    Date.now(),
+      name:  name,
+      brand: el('p-brand').value.trim(),
+      cat:   cat,
+      price: el('p-price').value.trim(),
+      desc:  el('p-desc').value.trim(),
+      badge: el('p-badge').value.trim(),
+      img:   imgBase64 || null
+    });
+    localStorage.setItem('iris_products', JSON.stringify(products));
+
+    ['p-name','p-brand','p-price','p-desc','p-badge'].forEach(function (id) { el(id).value = ''; });
+    el('p-cat').value = '';
+    el('p-img-preview').style.display = 'none';
+    el('p-img-input').value = '';
+    imgBase64 = null;
+
+    renderProducts();
+    updateTabCount();
+    showToast('✓ Producto agregado al catálogo');
+  });
+
+  // ── CONTACTO ──
+  el('contact-form').
