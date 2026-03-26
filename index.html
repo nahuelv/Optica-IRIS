@@ -569,6 +569,9 @@
   var CACHE_KEY_RESENAS  = 'iris_cache_resenas';
   var CACHE_KEY_TS       = 'iris_cache_ts';
 
+  // Limpiar caché viejo que puede estar en formato incorrecto
+  (function(){ try { var p = JSON.parse(localStorage.getItem(CACHE_KEY_PRODUCTS)); if (p && !Array.isArray(p)) cacheInvalidate(); } catch(e){ cacheInvalidate(); } })();
+
   function cacheGet(key) {
     try { return JSON.parse(localStorage.getItem(key)); } catch(e) { return null; }
   }
@@ -597,7 +600,7 @@
   // ── CARGAR PRODUCTOS ──
   function loadProducts() {
     var cached = cacheGet(CACHE_KEY_PRODUCTS);
-    if (cached) {
+    if (cached && Array.isArray(cached)) {
       products = cached; renderProducts();
       // Verifica en segundo plano si hay cambios en el servidor
       checkCacheValid(function(valid){
@@ -957,7 +960,7 @@
 
   function loadResenas() {
     var cached = cacheGet(CACHE_KEY_RESENAS);
-    if (cached) {
+    if (cached && Array.isArray(cached)) {
       resenas = cached; renderResenas();
       checkCacheValid(function(valid){
         if (!valid) fetchResenas();
