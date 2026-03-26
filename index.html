@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Óptica Iris</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
 <style>
   :root {
     --black: #0a0a0a; --white: #fafaf8; --cream: #f2efe8;
@@ -15,8 +14,6 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--black); overflow-x: hidden; }
-
-  /* NAV */
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 4rem; background: rgba(250,250,248,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
   .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 500; letter-spacing: .08em; color: var(--black); text-decoration: none; }
   .nav-logo span { color: var(--accent); }
@@ -25,8 +22,6 @@
   .nav-links a:hover { color: var(--accent); }
   .nav-admin-btn { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; background: var(--black); color: var(--white); border: none; padding: .55rem 1.3rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: background .2s; }
   .nav-admin-btn:hover { background: var(--accent); }
-
-  /* HERO */
   #inicio { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; }
   .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 6rem 4rem; }
   .hero-tag { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; font-weight: 500; }
@@ -44,13 +39,9 @@
   .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 500; color: var(--black); line-height: 1; }
   .stat-label { font-size: .7rem; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
   @keyframes pulse { 0%,100%{transform:scale(1);opacity:.3} 50%{transform:scale(1.08);opacity:.6} }
-
-  /* SECTIONS */
   section { padding: 6rem 4rem; }
   .section-label { font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; font-weight: 500; }
   .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 300; line-height: 1.15; margin-bottom: 1rem; }
-
-  /* CATALOGO */
   .cats { display: flex; gap: 1rem; margin: 2.5rem 0 3rem; flex-wrap: wrap; }
   .cat-btn { padding: .5rem 1.4rem; border: 1px solid var(--border); background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; transition: all .2s; color: var(--muted); }
   .cat-btn.active, .cat-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
@@ -71,8 +62,6 @@
   .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; color: var(--muted); }
   .empty-state svg { width: 60px; height: 60px; margin-bottom: 1rem; opacity: .3; }
   .empty-state p { font-size: 1rem; }
-
-  /* NOSOTROS */
   #nosotros { background: var(--cream); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
   .about-text p { font-size: .95rem; color: #555; line-height: 1.9; margin-top: 1.5rem; font-weight: 300; }
   .about-features { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
@@ -86,8 +75,6 @@
   .about-stat:last-child { border-bottom: none; padding-bottom: 0; }
   .about-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300; color: var(--accent); line-height: 1; }
   .about-stat-desc { font-size: .82rem; color: var(--muted); margin-top: .3rem; }
-
-  /* CONTACTO */
   .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; }
   .contact-info { display: flex; flex-direction: column; gap: 2rem; }
   .contact-item h4 { font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: .4rem; }
@@ -99,14 +86,10 @@
   .contact-form textarea { resize: none; height: 120px; }
   .form-btn { background: var(--black); color: var(--white); border: none; padding: .9rem 2rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 500; transition: background .2s; align-self: flex-start; }
   .form-btn:hover { background: var(--accent); }
-
-  /* FOOTER */
   footer { background: var(--black); color: var(--white); padding: 3rem 4rem; display: flex; align-items: center; justify-content: space-between; }
   .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 500; letter-spacing: .08em; }
   .footer-logo span { color: var(--accent-light); }
   footer p { font-size: .78rem; color: #666; }
-
-  /* LOGIN MODAL */
   #login-overlay { display: none; position: fixed; inset: 0; z-index: 998; background: rgba(0,0,0,.65); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
   #login-overlay.open { display: flex; }
   .login-box { background: var(--white); width: 360px; padding: 2.8rem 2.4rem; border: 1px solid var(--border); }
@@ -127,12 +110,8 @@
   .login-submit:hover { background: var(--black); }
   .login-cancel { background: none; border: none; font-family: 'DM Sans', sans-serif; font-size: .78rem; color: var(--muted); cursor: pointer; text-align: center; width: 100%; text-decoration: underline; transition: color .2s; }
   .login-cancel:hover { color: var(--black); }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
   @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
-  .login-box.animate-in { animation: fadeUp .3s cubic-bezier(.16,1,.3,1); }
   .login-box.shake { animation: shake .4s ease; }
-
-  /* ADMIN PANEL */
   #admin-overlay { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); align-items: flex-start; justify-content: flex-end; }
   #admin-overlay.open { display: flex; }
   .admin-panel { width: 520px; height: 100vh; background: var(--white); overflow-y: auto; display: flex; flex-direction: column; animation: slideIn .35s cubic-bezier(.16,1,.3,1); }
@@ -174,22 +153,14 @@
   .admin-delete-btn { background: none; border: 1px solid var(--border); padding: .3rem .6rem; cursor: pointer; font-size: .75rem; color: #c0392b; transition: all .2s; font-family: 'DM Sans', sans-serif; }
   .admin-delete-btn:hover { background: #c0392b; color: white; border-color: #c0392b; }
   .admin-empty { text-align: center; padding: 3rem; color: var(--muted); font-size: .88rem; }
-
-  /* TOAST */
   .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(2rem); background: var(--accent); color: white; padding: .8rem 2rem; font-size: .85rem; z-index: 9999; opacity: 0; transition: all .4s; pointer-events: none; letter-spacing: .05em; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
   @media (max-width: 900px) {
-    nav { padding: 1.2rem 2rem; }
-    .nav-links { display: none; }
-    #inicio { grid-template-columns: 1fr; }
-    .hero-right { display: none; }
-    .hero-left { padding: 4rem 2rem; }
-    section { padding: 4rem 2rem; }
-    #nosotros { grid-template-columns: 1fr; }
-    .contact-grid { grid-template-columns: 1fr; }
-    footer { flex-direction: column; gap: 1rem; text-align: center; }
-    .admin-panel { width: 100%; }
+    nav { padding: 1.2rem 2rem; } .nav-links { display: none; }
+    #inicio { grid-template-columns: 1fr; } .hero-right { display: none; }
+    .hero-left { padding: 4rem 2rem; } section { padding: 4rem 2rem; }
+    #nosotros { grid-template-columns: 1fr; } .contact-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; } .admin-panel { width: 100%; }
   }
 </style>
 </head>
@@ -277,7 +248,7 @@
       <div class="contact-item"><h4>Dirección</h4><p>Av. Corrientes 1234<br>Rosario, Santa Fe</p></div>
       <div class="contact-item"><h4>Horario</h4><p>Lunes a Viernes: 9 – 13 / 17 – 21<br>Sábados: 9 – 13</p></div>
       <div class="contact-item"><h4>Teléfono / WhatsApp</h4><p>+54 341 000-0000</p></div>
-      <div class="contact-item"><h4>Email</h4><p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82ebece4edc2edf2f6ebe1e3ebf0ebf1ace1edeface3f0">[email&#160;protected]</a></p></div>
+      <div class="contact-item"><h4>Email</h4><p>info@opticairis.com.ar</p></div>
     </div>
     <form class="contact-form" id="contact-form">
       <div class="form-row">
@@ -296,9 +267,9 @@
   <p>© 2025 Óptica Iris · Rosario, Santa Fe</p>
 </footer>
 
-<!-- LOGIN MODAL -->
+<!-- LOGIN -->
 <div id="login-overlay">
-  <div class="login-box animate-in" id="login-box">
+  <div class="login-box" id="login-box">
     <div class="login-lock">
       <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
     </div>
@@ -308,7 +279,7 @@
       <input type="text" id="login-user" placeholder="Usuario" autocomplete="off">
       <div class="input-wrap">
         <input type="password" id="login-pass" placeholder="Contraseña" autocomplete="off">
-        <button class="toggle-pw" id="toggle-pw" type="button" title="Mostrar contraseña">
+        <button class="toggle-pw" id="toggle-pw" type="button">
           <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
       </div>
@@ -319,7 +290,7 @@
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div id="admin-overlay">
   <div class="admin-panel">
     <div class="admin-header">
@@ -335,17 +306,10 @@
     </div>
     <div class="admin-body">
       <div id="tab-nuevo" class="admin-form">
-        <div class="form-group">
-          <label>Nombre del producto *</label>
-          <input type="text" id="p-name" placeholder="Ej: Ray-Ban Wayfarer Classic">
-        </div>
-        <div class="form-group">
-          <label>Marca</label>
-          <input type="text" id="p-brand" placeholder="Ej: Ray-Ban">
-        </div>
+        <div class="form-group"><label>Nombre del producto *</label><input type="text" id="p-name" placeholder="Ej: Ray-Ban Wayfarer Classic"></div>
+        <div class="form-group"><label>Marca</label><input type="text" id="p-brand" placeholder="Ej: Ray-Ban"></div>
         <div class="form-row-2">
-          <div class="form-group">
-            <label>Categoría *</label>
+          <div class="form-group"><label>Categoría *</label>
             <select id="p-cat">
               <option value="">Seleccionar…</option>
               <option value="vista">Anteojos de vista</option>
@@ -354,15 +318,9 @@
               <option value="accesorios">Accesorios</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Precio (ARS)</label>
-            <input type="number" id="p-price" placeholder="Ej: 35000">
-          </div>
+          <div class="form-group"><label>Precio (ARS)</label><input type="number" id="p-price" placeholder="Ej: 35000"></div>
         </div>
-        <div class="form-group">
-          <label>Descripción</label>
-          <textarea id="p-desc" placeholder="Breve descripción del producto…"></textarea>
-        </div>
+        <div class="form-group"><label>Descripción</label><textarea id="p-desc" placeholder="Breve descripción del producto…"></textarea></div>
         <div class="form-group">
           <label>Imagen</label>
           <div class="img-upload-area">
@@ -371,10 +329,7 @@
             <img class="img-preview" id="p-img-preview" alt="">
           </div>
         </div>
-        <div class="form-group">
-          <label>Badge (opcional)</label>
-          <input type="text" id="p-badge" placeholder="Ej: Nuevo, Oferta, Destacado">
-        </div>
+        <div class="form-group"><label>Badge (opcional)</label><input type="text" id="p-badge" placeholder="Ej: Nuevo, Oferta, Destacado"></div>
         <button class="admin-save-btn" id="admin-save">Agregar producto al catálogo</button>
       </div>
       <div id="tab-lista" style="display:none;">
@@ -386,19 +341,12 @@
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-document.addEventListener('DOMContentLoaded', function () {
-
-  // ── ESTADO ──
-  var products = JSON.parse(localStorage.getItem('iris_products') || '[]');
-  var currentFilter = 'todos';
-  var imgBase64 = null;
-  // El token se guarda en sessionStorage: dura mientras la pestaña esté abierta
-  var isAuth = !!sessionStorage.getItem('iris_token');
-
+<!-- El script va ANTES de cerrar body, sin DOMContentLoaded -->
+<!-- Los elementos ya existen en el DOM cuando este script corre -->
+<script>
+(function () {
   function el(id) { return document.getElementById(id); }
 
-  // ── TOAST ──
   function showToast(msg) {
     var t = el('toast');
     t.textContent = msg;
@@ -407,51 +355,42 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function catLabel(cat) {
-    var m = { vista: 'Vista', sol: 'Sol', contacto: 'Contacto', accesorios: 'Accesorios' };
-    return m[cat] || cat;
+    return { vista:'Vista', sol:'Sol', contacto:'Contacto', accesorios:'Accesorios' }[cat] || cat;
   }
+
+  // ── ESTADO ──
+  var products = JSON.parse(localStorage.getItem('iris_products') || '[]');
+  var currentFilter = 'todos';
+  var imgBase64 = null;
+  var isAuth = !!sessionStorage.getItem('iris_token');
 
   // ── CATÁLOGO ──
   function renderProducts() {
     var grid = el('products-grid');
-    var filtered = currentFilter === 'todos'
-      ? products
-      : products.filter(function (p) { return p.cat === currentFilter; });
-
+    var filtered = currentFilter === 'todos' ? products : products.filter(function(p){ return p.cat === currentFilter; });
     if (filtered.length === 0) {
-      grid.innerHTML = '<div class="empty-state">'
-        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">'
-        + '<path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/>'
-        + '<path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>'
-        + '<p>No hay productos en esta categoría todavía.<br>¡Agregá uno desde el panel admin!</p></div>';
+      grid.innerHTML = '<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg><p>No hay productos en esta categoría todavía.<br>¡Agregá uno desde el panel admin!</p></div>';
       return;
     }
-
-    grid.innerHTML = filtered.map(function (p) {
-      return '<div class="product-card">'
-        + '<div class="product-img">'
-        + (p.img
-            ? '<img src="' + p.img + '" alt="' + p.name + '">'
-            : '<svg class="product-img-placeholder" viewBox="0 0 120 60" fill="none">'
-              + '<ellipse cx="32" cy="30" rx="28" ry="22" stroke="#2d5a4b" stroke-width="3"/>'
-              + '<ellipse cx="88" cy="30" rx="28" ry="22" stroke="#2d5a4b" stroke-width="3"/>'
-              + '<path d="M60 30 Q64 24 72 30" stroke="#2d5a4b" stroke-width="3" fill="none"/></svg>')
-        + (p.badge ? '<span class="product-badge">' + p.badge + '</span>' : '')
+    grid.innerHTML = filtered.map(function(p){
+      return '<div class="product-card"><div class="product-img">'
+        + (p.img ? '<img src="'+p.img+'" alt="'+p.name+'">' : '<svg class="product-img-placeholder" viewBox="0 0 120 60" fill="none"><ellipse cx="32" cy="30" rx="28" ry="22" stroke="#2d5a4b" stroke-width="3"/><ellipse cx="88" cy="30" rx="28" ry="22" stroke="#2d5a4b" stroke-width="3"/><path d="M60 30 Q64 24 72 30" stroke="#2d5a4b" stroke-width="3" fill="none"/></svg>')
+        + (p.badge ? '<span class="product-badge">'+p.badge+'</span>' : '')
         + '</div><div class="product-info">'
-        + (p.brand ? '<p class="product-brand">' + p.brand + '</p>' : '')
-        + '<h3 class="product-name">' + p.name + '</h3>'
-        + (p.desc ? '<p class="product-desc">' + p.desc + '</p>' : '')
+        + (p.brand ? '<p class="product-brand">'+p.brand+'</p>' : '')
+        + '<h3 class="product-name">'+p.name+'</h3>'
+        + (p.desc ? '<p class="product-desc">'+p.desc+'</p>' : '')
         + '<div class="product-footer">'
-        + (p.price ? '<span class="product-price">$' + Number(p.price).toLocaleString('es-AR') + '</span>' : '')
-        + '<span class="product-tag">' + catLabel(p.cat) + '</span>'
+        + (p.price ? '<span class="product-price">$'+Number(p.price).toLocaleString('es-AR')+'</span>' : '')
+        + '<span class="product-tag">'+catLabel(p.cat)+'</span>'
         + '</div></div></div>';
     }).join('');
   }
 
-  document.querySelectorAll('.cat-btn').forEach(function (btn) {
-    btn.addEventListener('click', function () {
+  document.querySelectorAll('.cat-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
       currentFilter = btn.dataset.cat;
-      document.querySelectorAll('.cat-btn').forEach(function (b) { b.classList.remove('active'); });
+      document.querySelectorAll('.cat-btn').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
       renderProducts();
     });
@@ -462,10 +401,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (isAuth) { openAdmin(); return; }
     el('login-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
-    var box = el('login-box');
-    box.classList.remove('shake');
-    box.classList.add('animate-in');
-    setTimeout(function () { el('login-user').focus(); }, 80);
+    setTimeout(function(){ el('login-user').focus(); }, 80);
   }
 
   function closeLogin() {
@@ -486,72 +422,47 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.disabled = true;
     el('login-error').classList.remove('show');
 
-    // Login via Netlify Identity
-    netlifyIdentity.on('error', function() {
-      btn.textContent = 'Ingresar';
-      btn.disabled = false;
-      el('login-error').textContent = 'Usuario o contraseña incorrectos';
-      el('login-error').classList.add('show');
-      el('login-pass').value = '';
-      el('login-pass').focus();
-      var box = el('login-box');
-      box.classList.remove('animate-in', 'shake');
-      void box.offsetWidth;
-      box.classList.add('shake');
-    });
-
-    netlifyIdentity.on('login', function(user) {
-      btn.textContent = 'Ingresar';
-      btn.disabled = false;
-      isAuth = true;
-      sessionStorage.setItem('iris_token', user.token.access_token);
-      netlifyIdentity.close();
-      closeLogin();
-      openAdmin();
-    });
-
-    // Intentar login con email/pass via Netlify Identity API
-    var siteUrl = window.location.origin;
-    fetch(siteUrl + '/.netlify/identity/token', {
+    fetch('/.netlify/functions/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: 'grant_type=password&username=' + encodeURIComponent(u) + '&password=' + encodeURIComponent(p)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: u, password: p })
     })
-    .then(function(res) {
-      if (!res.ok) throw new Error('invalid');
-      return res.json();
-    })
-    .then(function(data) {
+    .then(function(res){ return res.json(); })
+    .then(function(data){
       btn.textContent = 'Ingresar';
       btn.disabled = false;
-      isAuth = true;
-      sessionStorage.setItem('iris_token', data.access_token);
-      closeLogin();
-      openAdmin();
+      if (data.ok) {
+        isAuth = true;
+        sessionStorage.setItem('iris_token', data.token);
+        closeLogin();
+        openAdmin();
+      } else {
+        el('login-error').classList.add('show');
+        el('login-pass').value = '';
+        el('login-pass').focus();
+        var box = el('login-box');
+        box.classList.remove('shake');
+        void box.offsetWidth;
+        box.classList.add('shake');
+      }
     })
-    .catch(function() {
+    .catch(function(){
       btn.textContent = 'Ingresar';
       btn.disabled = false;
-      el('login-error').textContent = 'Usuario o contraseña incorrectos';
+      el('login-error').textContent = 'Error de conexión. Intentá de nuevo.';
       el('login-error').classList.add('show');
-      el('login-pass').value = '';
-      el('login-pass').focus();
-      var box = el('login-box');
-      box.classList.remove('animate-in', 'shake');
-      void box.offsetWidth;
-      box.classList.add('shake');
     });
   }
 
   el('btn-admin').addEventListener('click', openLogin);
   el('login-submit').addEventListener('click', doLogin);
   el('login-cancel').addEventListener('click', closeLogin);
-  el('login-pass').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
-  el('toggle-pw').addEventListener('click', function () {
+  el('login-pass').addEventListener('keydown', function(e){ if (e.key === 'Enter') doLogin(); });
+  el('toggle-pw').addEventListener('click', function(){
     var inp = el('login-pass');
     inp.type = inp.type === 'password' ? 'text' : 'password';
   });
-  el('login-overlay').addEventListener('click', function (e) {
+  el('login-overlay').addEventListener('click', function(e){
     if (e.target === el('login-overlay')) closeLogin();
   });
 
@@ -568,23 +479,21 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.style.overflow = '';
   }
 
-  function logout() {
+  el('admin-close').addEventListener('click', closeAdmin);
+  el('admin-logout').addEventListener('click', function(){
     isAuth = false;
     sessionStorage.removeItem('iris_token');
     closeAdmin();
     showToast('Sesión cerrada');
-  }
-
-  el('admin-close').addEventListener('click', closeAdmin);
-  el('admin-logout').addEventListener('click', logout);
-  el('admin-overlay').addEventListener('click', function (e) {
+  });
+  el('admin-overlay').addEventListener('click', function(e){
     if (e.target === el('admin-overlay')) closeAdmin();
   });
 
-  // ── TABS ADMIN ──
-  document.querySelectorAll('.admin-tab').forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      document.querySelectorAll('.admin-tab').forEach(function (t) { t.classList.remove('active'); });
+  // ── TABS ──
+  document.querySelectorAll('.admin-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.admin-tab').forEach(function(t){ t.classList.remove('active'); });
       tab.classList.add('active');
       var which = tab.dataset.tab;
       el('tab-nuevo').style.display = which === 'nuevo' ? 'flex' : 'none';
@@ -597,42 +506,32 @@ document.addEventListener('DOMContentLoaded', function () {
     el('tab-count-btn').textContent = 'Productos (' + products.length + ')';
   }
 
-  // ── LISTA ADMIN ──
   function renderAdminList() {
     var list = el('admin-product-list');
-    if (products.length === 0) {
-      list.innerHTML = '<div class="admin-empty">No hay productos cargados aún.</div>';
-      return;
-    }
-    list.innerHTML = products.map(function (p, i) {
+    if (products.length === 0) { list.innerHTML = '<div class="admin-empty">No hay productos cargados aún.</div>'; return; }
+    list.innerHTML = products.map(function(p, i){
       return '<div class="admin-product-item">'
-        + (p.img
-            ? '<img class="admin-product-thumb" src="' + p.img + '">'
-            : '<div class="admin-product-thumb" style="background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🕶️</div>')
-        + '<div class="admin-product-info"><strong>' + p.name + '</strong>'
-        + '<span>' + catLabel(p.cat) + (p.price ? ' · $' + Number(p.price).toLocaleString('es-AR') : '') + '</span></div>'
-        + '<button class="admin-delete-btn" data-index="' + i + '">Eliminar</button>'
+        + (p.img ? '<img class="admin-product-thumb" src="'+p.img+'">' : '<div class="admin-product-thumb" style="background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🕶️</div>')
+        + '<div class="admin-product-info"><strong>'+p.name+'</strong><span>'+catLabel(p.cat)+(p.price?' · $'+Number(p.price).toLocaleString('es-AR'):'')+'</span></div>'
+        + '<button class="admin-delete-btn" data-index="'+i+'">Eliminar</button>'
         + '</div>';
     }).join('');
-
-    list.querySelectorAll('.admin-delete-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
+    list.querySelectorAll('.admin-delete-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
         products.splice(Number(btn.dataset.index), 1);
         localStorage.setItem('iris_products', JSON.stringify(products));
-        renderProducts();
-        updateTabCount();
-        renderAdminList();
+        renderProducts(); updateTabCount(); renderAdminList();
         showToast('Producto eliminado');
       });
     });
   }
 
   // ── IMAGEN ──
-  el('p-img-input').addEventListener('change', function (e) {
+  el('p-img-input').addEventListener('change', function(e){
     var file = e.target.files[0];
     if (!file) return;
     var reader = new FileReader();
-    reader.onload = function (ev) {
+    reader.onload = function(ev){
       imgBase64 = ev.target.result;
       var preview = el('p-img-preview');
       preview.src = imgBase64;
@@ -641,35 +540,34 @@ document.addEventListener('DOMContentLoaded', function () {
     reader.readAsDataURL(file);
   });
 
-  // ── GUARDAR PRODUCTO ──
-  el('admin-save').addEventListener('click', function () {
+  // ── GUARDAR ──
+  el('admin-save').addEventListener('click', function(){
     var name = el('p-name').value.trim();
     var cat  = el('p-cat').value;
     if (!name) { showToast('⚠ Ingresá un nombre para el producto'); return; }
     if (!cat)  { showToast('⚠ Seleccioná una categoría'); return; }
-
-    products.push({
-      id:    Date.now(),
-      name:  name,
-      brand: el('p-brand').value.trim(),
-      cat:   cat,
-      price: el('p-price').value.trim(),
-      desc:  el('p-desc').value.trim(),
-      badge: el('p-badge').value.trim(),
-      img:   imgBase64 || null
-    });
+    products.push({ id: Date.now(), name: name, brand: el('p-brand').value.trim(), cat: cat, price: el('p-price').value.trim(), desc: el('p-desc').value.trim(), badge: el('p-badge').value.trim(), img: imgBase64 || null });
     localStorage.setItem('iris_products', JSON.stringify(products));
-
-    ['p-name','p-brand','p-price','p-desc','p-badge'].forEach(function (id) { el(id).value = ''; });
+    ['p-name','p-brand','p-price','p-desc','p-badge'].forEach(function(id){ el(id).value=''; });
     el('p-cat').value = '';
     el('p-img-preview').style.display = 'none';
     el('p-img-input').value = '';
     imgBase64 = null;
-
-    renderProducts();
-    updateTabCount();
+    renderProducts(); updateTabCount();
     showToast('✓ Producto agregado al catálogo');
   });
 
   // ── CONTACTO ──
-  el('contact-form').
+  el('contact-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    showToast('✓ Mensaje enviado. ¡Te contactamos pronto!');
+    e.target.reset();
+  });
+
+  // ── INIT ──
+  renderProducts();
+
+})();
+</script>
+</body>
+</html>
