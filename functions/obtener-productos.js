@@ -16,7 +16,11 @@ exports.handler = async function (event) {
       })
     );
 
-    products.sort(function (a, b) { return b.id - a.id; });
+    // Ordenar por orden manual si existe, si no por id desc
+    products.sort(function (a, b) {
+      if (a.order !== undefined && b.order !== undefined) return a.order - b.order;
+      return b.id - a.id;
+    });
 
     return {
       statusCode: 200,
