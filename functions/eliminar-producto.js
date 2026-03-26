@@ -1,0 +1,40 @@
+const { getStore } = require('@netlify/blobs');
+
+exports.handler = async function (event) {
+  if (event.httpMethod !== 'DELETE') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
+
+  // Verificar token de sesión
+  const token = event.headers['x-auth-token'];
+  if (!token) {
+    return { statusCode: 401, body: JSON.stringify({ ok: false, error: 'No autorizado' }) };
+  }
+
+  let body;
+  try {
+    body = JSON.parse(event.body);
+  } catch {
+    return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'Datos inválidos' }) };
+  }
+
+  if (!body.id) {
+    return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'Falta el ID del producto' }) };
+  }
+
+  try {
+    const store = getStore('productos');
+    await store.delete(String(body.id));
+
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ok: true }),
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ ok: false, error: err.message }),
+    };
+  }
+};
