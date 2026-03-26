@@ -561,12 +561,35 @@
   var editingId = null;
   var isAuth = !!sessionStorage.getItem('iris_token');
 
+  var CACHE_TTL = 10 * 60 * 1000; // 10 minutos en ms
+
+  function cacheGet(key) {
+    try {
+      var raw = localStorage.getItem(key);
+      if (!raw) return null;
+      var obj = JSON.parse(raw);
+      if (Date.now() - obj.ts > CACHE_TTL) { localStorage.removeItem(key); return null; }
+      return obj.data;
+    } catch(e) { return null; }
+  }
+
+  function cacheSet(key, data) {
+    try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data: data })); } catch(e) {}
+  }
+
+  function cacheInvalidate() {
+    localStorage.removeItem('iris_cache_products');
+    localStorage.removeItem('iris_cache_resenas');
+  }
+
   // ── CARGAR PRODUCTOS ──
   function loadProducts() {
+    var cached = cacheGet('iris_cache_products');
+    if (cached) { products = cached; renderProducts(); return; }
     el('products-grid').innerHTML = '<div class="loading-state"><span class="loading-dots">Cargando productos</span></div>';
     fetch('/.netlify/functions/obtener-productos')
       .then(function(r){ return r.json(); })
-      .then(function(d){ products = d.ok ? (d.products || []) : []; renderProducts(); })
+      .then(function(d){ products = d.ok ? (d.products || []) : []; cacheSet('iris_cache_products', products); renderProducts(); })
       .catch(function(){ products = []; renderProducts(); });
   }
 
@@ -810,7 +833,7 @@
         fetch('/.netlify/functions/eliminar-producto', { method:'DELETE', headers:{'Content-Type':'application/json','x-auth-token':sessionStorage.getItem('iris_token')||''}, body:JSON.stringify({id:id}) })
           .then(function(r){ return r.json(); })
           .then(function(d){
-            if (d.ok) { products=products.filter(function(p){ return String(p.id)!==String(id); }); renderProducts(); updateTabCount(); renderAdminList(); showToast('Producto eliminado'); }
+            if (d.ok) { cacheInvalidate(); products=products.filter(function(p){ return String(p.id)!==String(id); }); renderProducts(); updateTabCount(); renderAdminList(); showToast('Producto eliminado'); }
           })
           .catch(function(){ showToast('Error al eliminar'); });
       });
@@ -877,6 +900,7 @@
         btn.textContent = editingId ? 'Guardar cambios' : 'Agregar producto al catálogo';
         btn.disabled=false;
         if(d.ok){
+          cacheInvalidate();
           if(editingId) {
             var idx=products.findIndex(function(p){ return String(p.id)===String(editingId); });
             if(idx>-1) products[idx]=d.product; else products.unshift(d.product);
@@ -900,10 +924,12 @@
   var resenas = [];
 
   function loadResenas() {
+    var cached = cacheGet('iris_cache_resenas');
+    if (cached) { resenas = cached; renderResenas(); return; }
     el('testimonios-grid').innerHTML = '<div class="loading-state"><span class="loading-dots">Cargando reseñas</span></div>';
     fetch('/.netlify/functions/obtener-resenas')
       .then(function(r){ return r.json(); })
-      .then(function(d){ resenas = d.ok ? (d.resenas || []) : []; renderResenas(); })
+      .then(function(d){ resenas = d.ok ? (d.resenas || []) : []; cacheSet('iris_cache_resenas', resenas); renderResenas(); })
       .catch(function(){ resenas = []; renderResenas(); });
   }
 
@@ -961,7 +987,7 @@
         fetch('/.netlify/functions/eliminar-resena', { method:'DELETE', headers:{'Content-Type':'application/json','x-auth-token':sessionStorage.getItem('iris_token')||''}, body:JSON.stringify({id:id}) })
           .then(function(r){ return r.json(); })
           .then(function(d){
-            if(d.ok){ resenas=resenas.filter(function(r){ return String(r.id)!==String(id); }); renderResenas(); renderAdminResenas(); showToast('Reseña eliminada'); }
+            if(d.ok){ cacheInvalidate(); resenas=resenas.filter(function(r){ return String(r.id)!==String(id); }); renderResenas(); renderAdminResenas(); showToast('Reseña eliminada'); }
           })
           .catch(function(){ showToast('Error al eliminar'); });
       });
@@ -999,6 +1025,7 @@
           el('r-autor').value=''; el('r-texto').value=''; el('r-estrellas').value='5'; el('r-edit-id').value='';
           btn.textContent='Agregar reseña';
           renderResenas(); renderAdminResenas();
+          cacheInvalidate();
           showToast('✓ Reseña guardada');
         } else { showToast('Error: '+d.error); }
       })
