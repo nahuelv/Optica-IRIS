@@ -5,7 +5,6 @@ exports.handler = async function (event) {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  // Verificar token de sesión
   const token = event.headers['x-auth-token'];
   if (!token) {
     return { statusCode: 401, body: JSON.stringify({ ok: false, error: 'No autorizado' }) };
@@ -22,11 +21,15 @@ exports.handler = async function (event) {
     return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'Faltan campos requeridos' }) };
   }
 
-  // Asignar ID único basado en timestamp
   product.id = product.id || Date.now();
 
   try {
-    const store = getStore('productos');
+    const store = getStore({
+      name: 'productos',
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_TOKEN,
+    });
+
     await store.setJSON(String(product.id), product);
 
     return {

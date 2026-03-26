@@ -5,7 +5,6 @@ exports.handler = async function (event) {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  // Verificar token de sesión
   const token = event.headers['x-auth-token'];
   if (!token) {
     return { statusCode: 401, body: JSON.stringify({ ok: false, error: 'No autorizado' }) };
@@ -19,11 +18,16 @@ exports.handler = async function (event) {
   }
 
   if (!body.id) {
-    return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'Falta el ID del producto' }) };
+    return { statusCode: 400, body: JSON.stringify({ ok: false, error: 'Falta el ID' }) };
   }
 
   try {
-    const store = getStore('productos');
+    const store = getStore({
+      name: 'productos',
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_TOKEN,
+    });
+
     await store.delete(String(body.id));
 
     return {
